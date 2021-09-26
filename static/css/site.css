@@ -1,0 +1,4 @@
+/* Add a black background color to the top navigation */
+.value-cell {
+    border: 1px solid black;
+}
