@@ -12,11 +12,11 @@ pub struct DbContext {
 }
 
 impl DbContext {
-    pub async fn new() -> Self {
+    pub async fn new(uri: &str) -> Self {
         const ADMIN_USERNAME: &'static str = "admin";
 
         let pool = SqlitePoolOptions::new()
-            .connect("sqlite:database.db")
+            .connect(uri)
             .await
             .unwrap();
 
@@ -58,4 +58,9 @@ impl DbContext {
     pub fn executor(&self) -> &sqlite::SqlitePool {
         &self.pool
     }
+}
+
+#[cfg(test)]
+pub(crate) async fn in_memory_db_context() -> DbContext {
+    DbContext::new("sqlite::memory:").await
 }

@@ -8,7 +8,7 @@ mod auth;
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
     let app = rocket::build()
-        .manage(db::DbContext::new().await)
+        .manage(db::DbContext::new("sqlite:database.db").await)
         .attach(Template::fairing())
         .mount("/static", FileServer::from("static/"));
 

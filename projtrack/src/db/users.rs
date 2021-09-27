@@ -2,13 +2,13 @@ use crate::db::Executor;
 use rocket::serde::{Serialize, Deserialize};
 use sqlx::{FromRow};
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, FromRow, PartialEq, Eq, Debug)]
 pub struct User {
-    id: i64,
-    username: String,
-    hashed_password: crate::auth::HashedPassword,
-    email: String,
-    created_at: chrono::DateTime<chrono::Utc>,
+    pub id: i64,
+    pub username: String,
+    pub hashed_password: crate::auth::HashedPassword,
+    pub email: String,
+    pub created_at: chrono::DateTime<chrono::Utc>,
 }
 
 #[derive(Deserialize)]
@@ -40,10 +40,10 @@ impl User {
             .await
     }
 
-    pub async fn get(id: i64, executor: Executor<'_>) -> sqlx::Result<User> {
+    pub async fn get(id: i64, executor: Executor<'_>) -> sqlx::Result<Option<User>> {
         sqlx::query_as("SELECT * FROM User WHERE id=?")
             .bind(id)
-            .fetch_one(executor)
+            .fetch_optional(executor)
             .await
     }
 
@@ -69,5 +69,37 @@ impl User {
             .bind(username)
             .fetch_optional(executor)
             .await
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use rocket::tokio;
+
+    use super::*;
+    use crate::db::in_memory_db_context;
+
+    #[tokio::test]
+    async fn create_user() {
+        let db =  in_memory_db_context().await;
+
+        let new_user = NewUser {
+            username: "testuser".to_string(),
+            password: "abc123".to_string(),
+            email: "xyz".to_string(),
+        };
+
+        let new_user = User::create(new_user, db.executor()).await.unwrap();
+
+        assert!(new_user.id > 0);
+        assert_eq!(new_user.username, "testuser");
+        assert_eq!(new_user.email, "xyz");
+
+        let user_by_id = User::get(new_user.id, db.executor()).await.unwrap().unwrap();
+        assert_eq!(user_by_id, new_user);
+
+        let found_user = User::find("testuser", db.executor()).await.unwrap().unwrap();
+        assert_eq!(found_user, new_user);
     }
 }

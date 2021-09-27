@@ -4,6 +4,7 @@ use sqlx::error::BoxDynError;
 use sqlx::{Database, Decode, Sqlite, Type, Encode};
 use sqlx::encode::IsNull;
 
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct HashedPassword(String);
 
 impl HashedPassword {

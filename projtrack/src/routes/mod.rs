@@ -12,7 +12,7 @@ struct AllUsers {
 }
 
 #[rocket::get("/<id>")]
-async fn get_user(id: i64, db: &DbContext) -> ApiResult<User> {
+async fn get_user(id: i64, db: &DbContext) -> ApiResult<Option<User>> {
     User::get(id, db.executor())
         .await
         .map(|x| Json(x))
