@@ -20,7 +20,7 @@
                 }
             },
             "args": [],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}/projtrack"
         },
         {
             "type": "lldb",
@@ -39,7 +39,7 @@
                 }
             },
             "args": [],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}/projtrack"
         }
     ]
 }

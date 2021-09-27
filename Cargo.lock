@@ -1376,6 +1376,7 @@ version = "0.1.0"
 dependencies = [
  "argon2",
  "chrono",
+ "dotenv",
  "rand",
  "rocket",
  "rocket_dyn_templates",

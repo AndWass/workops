@@ -1,9 +1,10 @@
 use rand::Rng;
 use sqlx::sqlite;
 use sqlx::sqlite::SqlitePoolOptions;
-use std::path::Path;
 
 pub mod users;
+
+static MIGRATOR: sqlx::migrate::Migrator = sqlx::migrate!("./migrations");
 
 pub type Executor<'a> = &'a sqlite::SqlitePool;
 
@@ -20,10 +21,7 @@ impl DbContext {
             .await
             .unwrap();
 
-        let migrations = sqlx::migrate::Migrator::new(Path::new("migrations"))
-            .await
-            .unwrap();
-        migrations.run(&pool).await.unwrap();
+        MIGRATOR.run(&pool).await.unwrap();
 
         let admin_user = users::User::find(ADMIN_USERNAME, &pool).await.unwrap();
 
