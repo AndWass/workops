@@ -7,39 +7,39 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'proj-track'",
+            "name": "Debug executable 'workops'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=proj-track",
-                    "--package=proj-track"
+                    "--bin=workops",
+                    "--package=workops"
                 ],
                 "filter": {
-                    "name": "proj-track",
+                    "name": "workops",
                     "kind": "bin"
                 }
             },
             "args": [],
-            "cwd": "${workspaceFolder}/projtrack"
+            "cwd": "${workspaceFolder}"
         },
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'proj-track'",
+            "name": "Debug unit tests in executable 'workops'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=proj-track",
-                    "--package=proj-track"
+                    "--bin=workops",
+                    "--package=workops"
                 ],
                 "filter": {
-                    "name": "proj-track",
+                    "name": "workops",
                     "kind": "bin"
                 }
             },
             "args": [],
-            "cwd": "${workspaceFolder}/projtrack"
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
