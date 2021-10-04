@@ -31,25 +31,10 @@ impl NewUser
             created_at: chrono::Utc::now(),
         }
     }
-}
 
-impl User {
-    pub async fn all(executor: Executor<'_>) -> sqlx::Result<Vec<User>> {
-        sqlx::query_as("SELECT * FROM User")
-            .fetch_all(executor)
-            .await
-    }
-
-    pub async fn get(id: i64, executor: Executor<'_>) -> sqlx::Result<Option<User>> {
-        sqlx::query_as("SELECT * FROM User WHERE id=?")
-            .bind(id)
-            .fetch_optional(executor)
-            .await
-    }
-
-    pub async fn create(new_user: NewUser, executor: Executor<'_>) -> sqlx::Result<User>
+    pub async fn insert(self, executor: Executor<'_>) -> sqlx::Result<User>
     {
-        let mut user = new_user.to_user(0);
+        let mut user = self.to_user(0);
         let res: sqlx::sqlite::SqliteQueryResult = sqlx::query(
             r#"INSERT INTO User (username, hashed_password, email, created_at)
                     VALUES (?,?,?,?)"#)
@@ -61,6 +46,21 @@ impl User {
             .await?;
         user.id = res.last_insert_rowid();
         Ok(user)
+    }
+}
+
+impl User {
+    pub async fn all(executor: Executor<'_>) -> sqlx::Result<Vec<User>> {
+        sqlx::query_as("SELECT * FROM user")
+            .fetch_all(executor)
+            .await
+    }
+
+    pub async fn get(id: i64, executor: Executor<'_>) -> sqlx::Result<Option<User>> {
+        sqlx::query_as("SELECT * FROM user WHERE id=?")
+            .bind(id)
+            .fetch_optional(executor)
+            .await
     }
 
     pub async fn find(username: &str, executor: Executor<'_>) -> sqlx::Result<Option<User>>
@@ -90,7 +90,7 @@ mod tests
             email: "xyz".to_string(),
         };
 
-        let new_user = User::create(new_user, db.executor()).await.unwrap();
+        let new_user = new_user.insert(db.executor()).await.unwrap();
 
         assert!(new_user.id > 0);
         assert_eq!(new_user.username, "testuser");

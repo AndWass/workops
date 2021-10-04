@@ -52,7 +52,15 @@
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/uncased-790c3aa80adcc1c9/out" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/whoami-0feee9f8e4e4cdf9/out" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/debug/build/rocket-f9d7b759a1ef7b49/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/projtrack-macros-test/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/projtrack-macros/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/projtrack/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/libc-0b9b0dbcf6c0de04/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/libsqlite3-sys-5e6acd2cf41fd91f/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/syn-bdd9e7464c782b24/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/whoami-260f33fcbfe7393d/out" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
+      <excludeFolder url="file://$MODULE_DIR$/projtrack/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

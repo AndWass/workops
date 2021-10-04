@@ -3,10 +3,12 @@ use sqlx::sqlite;
 use sqlx::sqlite::SqlitePoolOptions;
 
 pub mod users;
+pub mod projects;
 
 static MIGRATOR: sqlx::migrate::Migrator = sqlx::migrate!("./migrations");
 
 pub type Executor<'a> = &'a sqlite::SqlitePool;
+pub type DateTime = chrono::DateTime<chrono::Utc>;
 
 pub struct DbContext {
     pool: sqlite::SqlitePool,
@@ -38,14 +40,11 @@ impl DbContext {
             // SAFETY: all bytes are alphanumeric so they are valid UTF-8
             let admin_password = unsafe { std::str::from_utf8_unchecked(&admin_password) };
             println!("!!! Adding administrator username and password:\n!!!\tUsername: {}\n!!!\tPassword: {}", ADMIN_USERNAME, admin_password);
-            users::User::create(
-                users::NewUser {
-                    username: ADMIN_USERNAME.to_string(),
-                    password: admin_password.to_string(),
-                    email: "root@root.local".to_string(),
-                },
-                &pool,
-            )
+            users::NewUser {
+                username: ADMIN_USERNAME.to_string(),
+                password: admin_password.to_string(),
+                email: "root@root.local".to_string(),
+            }.insert(&pool)
             .await
             .unwrap();
         }

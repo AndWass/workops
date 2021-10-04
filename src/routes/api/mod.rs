@@ -29,12 +29,13 @@ async fn list_users(db: &DbContext) -> ApiResult<AllUsers> {
 
 #[rocket::post("/create", data = "<user>")]
 async fn create_user(user: Json<crate::db::users::NewUser>, db: &DbContext) -> ApiResult<User> {
-    User::create(user.into_inner(), db.executor())
+    user.into_inner().insert(db.executor())
         .await
         .map(|x| Json(x))
         .map_err(|e| Debug(e))
 }
 
-pub fn mount(app: rocket::Rocket<rocket::Build>) -> rocket::Rocket<rocket::Build> {
-    app.mount("/user", rocket::routes![get_user, list_users, create_user])
+pub fn mount(base: &str, app: rocket::Rocket<rocket::Build>) -> rocket::Rocket<rocket::Build> {
+    let routes = rocket::routes![get_user, list_users, create_user];
+    app.mount(format!("{}/{}", base, "user"), routes)
 }
